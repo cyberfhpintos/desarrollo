@@ -1,0 +1,32 @@
+# Compilados de Python
+__pycache__/
+*.py[cod]
+*.so
+
+# Archivos temporales
+*.log
+*.tmp
+*.swp
+
+# Datos generados
+*.png
+*.jpg
+*.jpeg
+*.pdf
+*.json
+*.xlsx
+
+# Entornos virtuales
+venv/
+env/
+.venv/
+.env/
+
+# Configs de sistema y GUI
+.DS_Store
+Thumbs.db
+
+# Archivos de PyQt
+*.ui
+*.qrc
+
