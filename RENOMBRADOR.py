@@ -9,6 +9,8 @@ import pandas as pd
 from lector_de_nombre import Lector
 import tkinter as tk
 from tkinter import filedialog
+from estrategias_OCR import ocr_bordes_y_dilatacion
+
 
 class ProcesadorPDF:
     def __init__(self, pdf_directory):
@@ -115,11 +117,15 @@ class ProcesadorPDF:
                     break
 
             if patente_alternativa is None or patente_alternativa == "ILEGIBLE":
-                patente_alternativa = reconocimiento.mostrar_ventana_seleccion()
-                datos_acumulados["Patente"] = patente_alternativa
-                reconocimiento.set_dato("Patente", patente_alternativa)
-
-
+                patente_mejorada = ocr_bordes_y_dilatacion(reconocimiento.image_to_cv2(imagen_base), reconocimiento)
+                if patente_mejorada and patente_mejorada != "ILEGIBLE":
+                    datos_acumulados["Patente"] = patente_mejorada
+                    reconocimiento.set_dato("Patente", patente_mejorada)
+                    print(f"✅ Patente mejorada con bordes + dilatación: {patente_mejorada}")
+                else:    
+                    patente_alternativa = reconocimiento.mostrar_ventana_seleccion()
+                    datos_acumulados["Patente"] = patente_alternativa
+                    reconocimiento.set_dato("Patente", patente_alternativa)
 
             # ======== Nuevo bloque: completar datos faltantes ========
             if datos_acumulados["Orden"] is None:

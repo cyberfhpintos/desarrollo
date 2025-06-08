@@ -46,6 +46,18 @@ class ReconocimientoDatos:
         texto_limpio = re.sub(r'(\s*\n\s*)+', '\n', texto)
         return (texto_limpio)
 
+    def image_to_cv2(self, pil_img):
+        """Convierte una imagen PIL a formato OpenCV (cv2)."""
+        import cv2
+        import numpy as np
+        return cv2.cvtColor(np.array(pil_img), cv2.COLOR_RGB2BGR)
+
+    def cv2_to_pil(self, cv_img):
+        """Convierte una imagen OpenCV (cv2) a PIL."""
+        import cv2
+        from PIL import Image
+        return Image.fromarray(cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB))
+
     def extraer_datos(self):
         orden = self.extraer_orden()
 
