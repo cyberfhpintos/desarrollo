@@ -119,12 +119,38 @@ class ProcesadorPDF:
                 datos_acumulados["Patente"] = patente_alternativa
                 reconocimiento.set_dato("Patente", patente_alternativa)
 
+
+
+            # ======== Nuevo bloque: completar datos faltantes ========
+            if datos_acumulados["Orden"] is None:
+                orden_extra = reconocimiento.extraer_orden()
+                if orden_extra:
+                    datos_acumulados["Orden"] = orden_extra
+                    datos_acumulados["Poliza"] = None
+                    datos_acumulados["Siniestro"] = None
+            if datos_acumulados["Poliza"] is None:
+                poliza_extra = reconocimiento.extraer_poliza()
+                if poliza_extra:
+                    datos_acumulados["Poliza"] = poliza_extra
+            if datos_acumulados["Siniestro"] is None:
+                siniestro_extra = reconocimiento.extraer_siniestro()
+                if siniestro_extra:
+                    datos_acumulados["Siniestro"] = siniestro_extra
+
+            # Sincronizar con el objeto ReconocimientoDatos
+            for dato, valor in datos_acumulados.items():
+                reconocimiento.set_dato(dato, valor)
+
             # Eliminar la imagen PNG después de procesar el archivo
             os.remove(self.ruta_imagen_base)
 
         print("Datos Acumulados: ---------------------------------------------------------------------")
         print(datos_acumulados)
         print("---------------------------------------------------------------------")
+        # 💥 FALTA ESTO:
+        for dato, valor in datos_acumulados.items():
+            reconocimiento.set_dato(dato, valor)
+        
         reconocimiento.renombrar_archivo_pdf(pdf_path)
 
         # Guardar el número de orden procesado
